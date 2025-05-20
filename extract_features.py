@@ -39,6 +39,9 @@ def extract_features():
                     print(f"Error processing {path}: {e}")
 
     features = np.array(features)
+    filenames = [f.replace("\\", "/") for f in filenames]
+    filenames = np.array(filenames)
+    
     np.save(os.path.join(FEATURE_DIR, 'features.npy'), features)
     np.save(os.path.join(FEATURE_DIR, 'filenames.npy'), filenames)
 
