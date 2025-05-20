@@ -29,8 +29,19 @@ def get_image_embedding(img_path):
 def recommend(query_img_path, top_k=5):
     query_embedding = get_image_embedding(query_img_path).reshape(1, -1)
     similarities = cosine_similarity(query_embedding, features)[0]
-    top_indices = np.argsort(similarities)[::-1][:top_k]
-    return [(filenames[i], similarities[i]) for i in top_indices]
+
+    # Load filenames
+    filenames_arr = np.load(FILENAMES_PATH)
+
+    # Exclude the image that's an exact match to the uploaded one
+    similarity_list = []
+    for i, fname in enumerate(filenames_arr):
+        if os.path.abspath(fname) != os.path.abspath(query_img_path):  # avoid self-match
+            similarity_list.append((fname, similarities[i]))
+
+    # Sort and return top_k
+    similarity_list = sorted(similarity_list, key=lambda x: x[1], reverse=True)
+    return similarity_list[:top_k]
 
 # Example usage
 if __name__ == "__main__":

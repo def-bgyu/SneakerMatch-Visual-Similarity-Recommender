@@ -1,12 +1,12 @@
 import streamlit as st
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageOps
 import os
 import tempfile
 from recommender import recommend
 
 st.set_page_config(page_title="Sneaker Visual Recommender", layout="centered")
-st.title("👟 Sneaker Visual Recommender")
+st.title("Sneaker Visual Recommender 👟")
 st.write("Upload an image of a sneaker and get visually similar results.")
 
 # Upload image
@@ -25,16 +25,12 @@ if uploaded_file is not None:
     results = recommend(temp_image_path, top_k=5)
 
     st.subheader("🔎 Top 5 Similar Sneakers:")
-    cols = st.columns(5)  # Create 5 columns
+    cols = st.columns(5)  
 
     for i, (path, score) in enumerate(results):
         with cols[i]:
             try:
                 img = Image.open(path)
-                st.image(img, use_container_width=True)
-                st.markdown(
-                    f"<div style='text-align: center; font-size: 13px;'>{os.path.basename(path)}<br>Similarity: {score:.2f}</div>",
-                    unsafe_allow_html=True
-                )
+                st.image(img, caption=f"{os.path.basename(path)}\n{score:.2f}", use_container_width=True)
             except Exception as e:
                 st.error(f"Couldn't load image: {e}")
