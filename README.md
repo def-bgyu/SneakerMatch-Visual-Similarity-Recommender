@@ -1,3 +1,5 @@
+# SneakerMatch
+
 SneakerMatch is a visual recommendation system that helps users find sneakers that look similar to a reference image. Upload a picture of a sneaker, and the app returns the top visually similar sneakers based on deep feature embeddings using a pre-trained ResNet50 model.
 
 ---
